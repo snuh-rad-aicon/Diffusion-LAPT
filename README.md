@@ -108,8 +108,6 @@ If you find our work useful in your research, please consider citing our paper:
 
 ## 🙏 Acknowledgements
 
-We would like to thank...
-
-## 📄 License
-
-This project is licensed under the [License Name] License - see the `LICENSE.md` file for details. 
+We would like to thank the authors of the following repositories for their valuable contributions:
+- [CompVis/taming-transformers](https://github.com/CompVis/taming-transformers) for their VQGAN implementation
+- [CompVis/latent-diffusion](https://github.com/CompVis/latent-diffusion) for their Latent Diffusion Models framework
