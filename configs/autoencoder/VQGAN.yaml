@@ -1,0 +1,57 @@
+model:
+  base_learning_rate: 4.5e-6
+  target: ldm.models.autoencoder.VQModel
+  params:
+    image_key: 'mri'
+    monitor: "val/rec_loss"
+    embed_dim: 3
+    n_embed: 8192
+    lossconfig:
+      target: ldm.modules.losses.VQLPIPSWithDiscriminator
+      params:
+        disc_conditional: False
+        disc_in_channels: 2
+        disc_start: 30001
+        disc_weight: 0.2
+        codebook_weight: 1.0
+        perceptual_weight: 0.0
+    
+    ddconfig:
+      double_z: False
+      z_channels: 3
+      resolution: 224
+      in_channels: 2
+      out_ch: 2
+      ch: 128
+      ch_mult: [ 1,2,4 ]  # num_down = len(ch_mult)-1
+      num_res_blocks: 2
+      attn_resolutions: [16]
+      dropout: 0.0
+
+
+data:
+  target: main.DataModuleFromConfig
+  params:
+    batch_size: 2
+    num_workers: 8
+    wrap: True
+    train:
+      target: ldm.data.dwi.DWITrain
+      params:
+        dataroot: path/to/data/train
+    validation:
+      target: ldm.data.dwi.DWIValidation
+      params:
+        dataroot: path/to/data/val
+
+
+lightning:
+  callbacks:
+    image_logger:
+      target: main.ImageLogger
+      params:
+        increase_log_steps: True
+
+  trainer:
+    benchmark: True
+    accumulate_grad_batches: 2
