@@ -7,101 +7,89 @@
 
 This repository contains the official PyTorch implementation for the paper "Lesion-Aware Post-Training of Latent Diffusion Models for Synthesizing Diffusion MRI from CT Perfusion".
 
-## 📖 Introduction
+## 📖 Abstract
 
-Acute ischemic stroke is a time-critical emergency where quick and accurate diagnosis is paramount. Diffusion-weighted imaging (DWI) is the gold standard for identifying ischemic legions, but it's not always available. CT Perfusion (CTP) is more common but lacks the specificity of DWI. This work bridges the gap by proposing a novel method to synthesize high-fidelity DWI from CTP scans.
-
-Our approach, which we call **Lesion-Aware Post-Training (LAPT)**, leverages the power of Latent Diffusion Models (LDMs). We first train a standard LDM to synthesize DWI from CTP. Then, we introduce a lesion-aware post-training step that specifically focuses the model on accurately rendering ischemic lesions, which are often subtle and complex. This ensures that our synthesized DWI is not only visually realistic but also clinically reliable.
-
-### Key Contributions
-- A novel LAPT framework for high-fidelity and clinically-aware medical image synthesis.
-- A method to generate high-quality DWI from CTP, potentially enabling faster stroke diagnosis in settings where DWI is unavailable.
-- State-of-the-art performance in synthesizing realistic DWI scans that preserve lesion details.
-
-## ✨ Results
-
-Here are some examples of DWI synthesized from CTP images using our LAPT model.
-
-| CTP Input | Synthesized DWI (Ours) | Ground Truth DWI |
-|:---:|:---:|:---:|
-| *Image Placeholder* | *Image Placeholder* | *Image Placeholder* |
-| *Image Placeholder* | *Image_Placeholder* | *Image Placeholder* |
-
-*(We will add images here soon)*
-
-## 🧬 Model Architecture
-
-Our model builds upon the Latent Diffusion Model architecture. The core innovation is the Lesion-Aware Post-Training stage, where the diffusion model is fine-tuned to better capture the characteristics of stroke lesions.
-
-```mermaid
-graph TD
-    A["CT Perfusion Scan"] --> B("Encoder");
-    B --> C{"Latent Representation"};
-    C --> D("Latent Diffusion Model");
-    subgraph "Lesion-Aware Post-Training"
-        D
-    end
-    D --> E("Decoder");
-    E --> F["Synthesized DWI"];
-```
+Image-to-Image translation models can help mitigate various challenges inherent to medical image acquisition. Latent diffusion models (LDMs) leverage efficient learning in compressed latent space and constitute the core of state-of-the-art generative image models. However, this efficiency comes with a trade-off, potentially compromising crucial pixel-level detail essential for high-fidelity medical images. This limitation becomes particularly critical when generating clinically significant structures, such as lesions, which often occupy only a small portion of the image. Failure to accurately reconstruct these regions can severely impact diagnostic reliability and clinical decision-making. To overcome this limitation, we propose a novel post-training framework for LDMs in medical image-to-image translation by incorporating lesion-aware medical pixel space objectives. This approach is essential, as it not only enhances overall image quality but also improves the precision of lesion delineation. We evaluate our framework on brain CT-to-MRI translation in acute ischemic stroke patients, where early and accurate diagnosis is critical for optimal treatment selection and improved patient outcomes. While diffusion MRI is the gold standard for stroke diagnosis, its clinical utility is often constrained by high costs and low accessibility. Using a dataset of 817 patients, we demonstrate that our framework improves overall image quality and enhances lesion delineation when synthesizing DWI and ADC images from CT perfusion scans, outperforming existing image-to-image translation models. Furthermore, our post-training strategy is easily adaptable to pre-trained LDMs and exhibits substantial potential for broader applications across diverse medical image translation tasks.
 
 ## 🚀 Getting Started
 
-### Prerequisites
+#### Data Preprocessing
 
-This codebase is built on PyTorch and PyTorch Lightning. We recommend using `conda` to manage dependencies.
-
-First, clone the repository:
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-```
-
-An `environment.yml` file may be available in the parent `CTP2DWI` directory. If so, you can create the conda environment with:
+We provide a preprocessing script to convert NIFTI files to NPY format, which is used for training:
 
 ```bash
-conda env create -f ../environment.yml
-conda activate your-env-name
+# Run preprocessing
+bash scripts/preprocessing.sh
 ```
 
-Key dependencies include:
-- Python 3.8+
-- PyTorch
-- PyTorch Lightning
-- OmegaConf
-- WandB (for logging)
-- NumPy, Pillow
-
-### Data Preparation
-
-You will need to prepare your dataset of paired CTP and DWI scans. The data loading is handled by the `DataModuleFromConfig` class in `main.py`, which is configured through a `yaml` file. Please structure your data and create a corresponding `yaml` configuration for `train`, `validation`, and `test` sets.
+You may need to modify the input and output paths in the script:
+```bash
+python ldm/data/preprocessing.py --input_dir path/to/nifti/data/train --output_dir path/to/npy/data/train
+python ldm/data/preprocessing.py --input_dir path/to/nifti/data/val --output_dir path/to/npy/data/val
+```
 
 ## 💻 Usage
 
 This project uses `main.py` as the main entry point for training and testing, configured by `.yaml` files.
 
-### Training
+### Training Pipeline
 
-To train the model, you need to specify a configuration file. Example configuration files can be found in the `configs/` directory.
+Our model training follows a three-step process:
+
+#### 1. Train the VQGAN Autoencoder
+
+First, train the VQGAN model to learn a compressed latent space representation:
 
 ```bash
-python main.py --base configs/your_training_config.yaml -t --gpus 0,1 --project "LAPT_DWI_Synthesis"
+bash scripts/train_VQVAE.sh
 ```
-- `--base`: Path to the base configuration YAML file.
-- `-t` or `--train`: A boolean flag to enable training mode.
-- `--gpus`: Specify which GPUs to use.
-- `--project`: Name of the project (for logging, e.g., with WandB).
+
+This uses the configuration in `configs/autoencoder/VQGAN.yaml`.
+
+#### 2. Train the Base Latent Diffusion Model (LDM)
+
+Next, train the base LDM for DWI synthesis from CTP:
+
+```bash
+bash scripts/train_LDM.sh
+```
+
+This uses the configuration in `configs/latent-diffusion/ldm.yaml`.
+
+#### 3. Apply Lesion-Aware Post-Training (LAPT)
+
+Finally, apply our novel LAPT to enhance lesion accuracy:
+
+```bash
+bash scripts/train_LDM_LAPT.sh
+```
+
+This uses the configuration in `configs/latent-diffusion/ldm_lapt.yaml`.
 
 ### Inference
 
-To run inference with a trained model, you can use the same `main.py` script. You need to provide a path to the trained checkpoint.
+To run inference with a trained model, you can use the provided sampling script:
 
 ```bash
-python main.py --resume path/to/your/log/directory/ --no-test False
+bash scripts/sampling_LDM.sh
 ```
 
-- `--resume`: Path to the log directory of a trained model. The script will automatically find the `last.ckpt`. Or you can provide the full path to a checkpoint file.
-- `--no-test False`: Make sure testing is enabled.
+You should modify the script to point to your trained model checkpoint:
+```bash
+python scripts/sample_LDM.py \
+    -r path/to/LDM/checkpoint.ckpt \
+    --n_samples 1 \
+    --batch_size 48 \
+    --steps 2
+```
+
+Parameters for sampling:
+- `-r, --resume`: Path to the model checkpoint
+- `--n_samples`: Number of samples to generate per input
+- `--batch_size`: Batch size for inference
+- `--steps`: Number of DDIM sampling steps (more steps = higher quality but slower)
+
+The sampling script will output the synthesized DWI images in NIFTI format in a directory structure organized by sample ID.
 
 ## 📜 Citation
 
