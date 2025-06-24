@@ -5,6 +5,13 @@
 
 **Provisionally accepted at MICCAI 2025 (Top 9% Submission)**
 
+## Authors
+
+**Junhyeok Lee**<sup>1*</sup>, **Hyunwoong Kim**<sup>2*</sup>, **Hyungjin Chung**<sup>3</sup>, **Heeseong Eom**<sup>1</sup>, **Joon Jang**<sup>4</sup>, **Chul-Ho Sohn**<sup>2</sup>, **Kyu Sung Choi**<sup>2†</sup>
+
+<sup>*</sup>These authors contributed equally to this paper.  
+<sup>†</sup>Corresponding author
+
 This repository contains the official PyTorch implementation for the paper "Lesion-Aware Post-Training of Latent Diffusion Models for Synthesizing Diffusion MRI from CT Perfusion".
 
 ## 📖 Abstract
@@ -96,12 +103,13 @@ The sampling script will output the synthesized DWI images in NIFTI format in a 
 If you find our work useful in your research, please consider citing our paper:
 
 ```bibtex
-@inproceedings{author2025lapt,
+@inproceedings{lee2025lapt,
   title={Lesion-Aware Post-Training of Latent Diffusion Models for Synthesizing Diffusion MRI from CT Perfusion},
-  author={Your Name and Co-authors},
+  author={Lee, Junhyeok and Kim, Hyunwoong and Chung, Hyungjin and Eom, Heeseong and Jang, Joon and Sohn, Chul-Ho and Choi, Kyu Sung},
   booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
   year={2025},
-  organization={Springer}
+  organization={Springer},
+  note={$^\star$J. Lee and H. Kim contributed equally to this paper. $^\dag$K.S. Choi is the corresponding author.}
 }
 ```
 *(BibTeX entry will be updated upon publication)*
