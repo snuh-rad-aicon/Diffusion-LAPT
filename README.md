@@ -7,7 +7,7 @@
 
 ## Authors
 
-**Junhyeok Lee**<sup>1*</sup>, **Hyunwoong Kim**<sup>2*</sup>, **Hyungjin Chung**<sup>3</sup>, **Heeseong Eom**<sup>1</sup>, **Joon Jang**<sup>4</sup>, **Chul-Ho Sohn**<sup>2</sup>, **Kyu Sung Choi**<sup>2†</sup>
+**Junhyeok Lee**<sup>*</sup>, **Hyunwoong Kim**<sup>*</sup>, **Hyungjin Chung**, **Heeseong Eom**, **Joon Jang**, **Chul-Ho Sohn**, **Kyu Sung Choi**<sup>†</sup>
 
 <sup>*</sup>These authors contributed equally to this paper.  
 <sup>†</sup>Corresponding author
