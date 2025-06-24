@@ -1,0 +1,19 @@
+# Python specific ignores
+__pycache__/
+*.pyc
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# OS specific ignores
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# IDE specific ignores (Optional)
+.idea/ # PyCharm
+.vscode/ # VS Code
+*.iml # IntelliJ
