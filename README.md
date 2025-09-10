@@ -102,17 +102,18 @@ The sampling script will output the synthesized DWI images in NIFTI format in a 
 
 If you find our work useful in your research, please consider citing our paper:
 
-<!-- ```bibtex
-@inproceedings{lee2025lapt,
-  title={Lesion-Aware Post-Training of Latent Diffusion Models for Synthesizing Diffusion MRI from CT Perfusion},
-  author={Lee, Junhyeok and Kim, Hyunwoong and Chung, Hyungjin and Eom, Heeseong and Jang, Joon and Sohn, Chul-Ho and Choi, Kyu Sung},
-  booktitle={International Conference on Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
-  year={2025},
-  organization={Springer},
-  note={$^\star$J. Lee and H. Kim contributed equally to this paper. $^\dag$K.S. Choi is the corresponding author.}
+```bibtex
+@InProceedings{LeeJun_LesionAware_MICCAI2025,
+        author = { Lee, Junhyeok and Kim, Hyunwoong and Chung, Hyungjin and Eom, Heeseong and Jang, Joon and Sohn, Chul-Ho and Choi, Kyu Sung},
+        title = { { Lesion-Aware Post-Training of Latent Diffusion Models for Synthesizing Diffusion MRI from CT Perfusion } },
+        booktitle = {proceedings of Medical Image Computing and Computer Assisted Intervention -- MICCAI 2025},
+        year = {2025},
+        publisher = {Springer Nature Switzerland},
+        volume = {LNCS 15961},
+        month = {September},
+        page = {280 -- 290}
 }
-``` -->
-*(BibTeX entry will be updated upon publication)*
+```
 
 ## 🙏 Acknowledgements
 
